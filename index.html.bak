@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html onselectstart="return false">
+<head>
+<base href="<%=basePath%>">
+
+<title>3D拖拽相册</title>
+
+<!--
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	-->
+<script type="text/javascript" class="autoinsert" src="js/jquery-1.9.1.js"></script>
+<script src="js/snowfall.jquery.js"></script> 
+
+<script type="text/javascript">
+
+
+   //雪花
+    $(document).ready(function () {
+    var minSize = 3;    // 飘落物最小尺寸
+    var maxSize = 30;   // 飘落物最大尺寸
+    var showRate = 20  // 飘落物出现的时间频率
+    var snowColor = "#FFFFFF"   // 飘落物颜色
+    var snowLayer = $('<div></div>').css({ 'position': 'absolute', 'top': '-50px' }).html('❄');  // 飘落物显示的层
+
+    var winHeight = $(document).height();   // 获取页面高度
+    var winWidth = $(document).width(); // 获取页面的宽度
+
+    setInterval(function () {
+        var a = Math.random();
+        var startPositionLeft = Math.random() * winWidth - 100;    // 飘落物下落时随机位置
+        var startOpacity = 0.7 + Math.random(); // 获取随机的透明
+        var sizeFlake = minSize + Math.random() * maxSize;  // 获取飘落物随机大小
+        var endPositionTop = winHeight - 80;    // 飘落物距离窗体上端距离
+        var endPositionLeft = (startPositionLeft + Math.random() * 500) >= winWidth ? winWidth - 50 : (startPositionLeft + Math.random() * 500); // 飘落物距离窗体左端距离
+        if (endPositionLeft > winWidth) {
+            endPositionLeft = winWidth - 100;
+        }
+        var durationFall = winHeight * 10 + Math.random() * 3000;   // 获取飘落物下落的随机速度
+
+        snowLayer.clone().appendTo('body').css({
+            left: startPositionLeft,
+            opacity: startOpacity,
+            'font-size': sizeFlake,
+            color: snowColor
+        }).animate({
+            top: endPositionTop,
+            left: endPositionLeft,
+            opacity: 0.5
+        }, durationFall, function () {
+            $(this).remove();
+        });
+    }, showRate);
+}); 
+
+
+	$(function() {
+		var roX=-10;
+		var roY=0;
+		var Deg = 360/$("#wrap img").size();
+		$("#wrap img").each(function(i)//遍历每一张图片
+		{
+			$(this).css({
+				"transform" : "rotateY(" + Deg*i + "deg)translateZ(350px)"
+			}).attr("ondragstart","return false");
+		});
+		$(document).mousedown(function(ev) {
+           var x_=ev.clientX;
+           var y_=ev.clientY;
+           console.log(x_+","+y_);//坐标
+		$(this).bind("mousemove", function(ev) {
+		   var x=ev.clientX;
+		   var y=ev.clientY;
+		   
+		   var xN=x-y_;
+		   var yN=y-y_; //当前点坐标减之前坐标
+		   
+		   roX+=xN*0.01;
+		   roY-=yN*0.1;
+		   $("#wrap").css({
+			   "transform":"perspective(800px) rotateX("+roY+"deg) rotateY(" +roX+ "deg)"
+		   }); 
+		   
+		   x_=ev.clientX;
+		   y_=ev.clientY;
+		  
+			}).mouseup(function(ev) {
+				$(this).unbind("mousemove");
+
+			});
+
+		});
+
+	});
+	
+	
+	
+</script>
+<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #000;overflow: hidden;
+}
+
+#wrap {
+	width: 140px;
+	height: 180px;
+	margin: 200px auto;
+	position: relative;
+	transform-style: preserve-3d;
+	transform: perspective(800px) ;rotateX(-10deg);
+}
+
+#wrap img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 5px;
+	box-shadow: 0 0 10px #fff;
+}
+</style>
+</head>
+
+<body>
+	<div id="wrap">
+	    <img src="images/1.png" /> 
+		<img src="images/1.jpg" /> 
+		<img src="images/2.jpg" />
+		<img src="images/3.jpg" /> 
+		<img src="images/3.png" /> 
+		<img src="images/4.jpg" /> 
+		<img src="images/5.jpg" /> 
+		<img src="images/6.jpg" /> 
+		<img src="images/7.jpg" /> 
+		<img src="images/4.png" /> 
+		<img src="images/8.jpg" /> 
+		<img src="images/9.jpg" />
+		<img src="images/0.png" />  
+		<img src="images/10.jpg" /> 
+		<img src="images/11.jpg" />
+		
+		<script>
+        $(document).snowfall('clear');
+        $(document).snowfall({
+            image:"images/huaban.png",
+            flakeCount:30,
+            minSize: 5,
+            maxSize: 22
+        });
+    </script>
+		
+		
+	</div>
+	<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+<p><font color="#FFFFFF">适用浏览器：IE8、360、FireFox、Chrome、Safari、Opera、傲游、搜狗、世界之窗. 
+</font> </p>
+<p><font color="#FFFFFF">来源：</font><a href="http://sc.chinaz.com/" target="_blank"><font color="#FFFFFF">小火博客</font></a></p>
+</body>
+</html>
